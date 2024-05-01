@@ -106,6 +106,7 @@ plugins {
 repositories {
     mavenCentral()
     mavenLocal()
+    maven (url="https://jitpack.io")
 }
 
 dependencies {
@@ -113,7 +114,7 @@ dependencies {
 //    implementation(libs.jsoup)
 //    implementation(libs.gson)
 //    implementation(libs.csv)
-
+    implementation("com.github.edwinRNDR:opendmx-jvm:0.0.1")
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.slf4j.api)
     implementation(libs.kotlin.logging)

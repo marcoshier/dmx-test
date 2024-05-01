@@ -1,10 +1,7 @@
+
 import org.openrndr.application
-import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.loadFont
-import org.openrndr.draw.loadImage
-import org.openrndr.draw.tint
-import kotlin.math.cos
-import kotlin.math.sin
+import org.openrndr.extra.olive.oliveProgram
+import org.openrndr.opendmx.Native
 
 fun main() = application {
     configure {
@@ -12,20 +9,21 @@ fun main() = application {
         height = 576
     }
 
-    program {
-        val image = loadImage("data/images/pm5544.png")
-        val font = loadFont("data/fonts/default.otf", 64.0)
+    Native.connect(1)
+
+    oliveProgram {
+
+        val ba = ByteArray(512) { 1.toByte() }
 
         extend {
-            drawer.drawStyle.colorMatrix = tint(ColorRGBa.WHITE.shade(0.2))
-            drawer.image(image)
+            println((mouse.position.x / width) * 255)
+            (0..511).map {
+                ba[it] = ((mouse.position.x / width) * 255).toInt().toByte()
+            }
+            Native.send(ba)
+            Thread.sleep(30)
+            //     ba[1] = 244.toByte()
 
-            drawer.fill = ColorRGBa.PINK
-            drawer.circle(cos(seconds) * width / 2.0 + width / 2.0, sin(0.5 * seconds) * height / 2.0 + height / 2.0, 140.0)
-
-            drawer.fontMap = font
-            drawer.fill = ColorRGBa.WHITE
-            drawer.text("OPENRNDR", width / 2.0, height / 2.0)
         }
     }
 }
